@@ -2,14 +2,11 @@ package com.example.snek
 
 import android.content.Context
 import android.graphics.*
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import androidx.annotation.RequiresApi
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -74,7 +71,7 @@ class Engine(context: Context, size: Point) : SurfaceView(context), Runnable {
     }
 
     private fun moveSnek(){
-        var newHeadPos = Point(snekPos!![0].x, snekPos!![0].y)
+        val newHeadPos = Point(snekPos!![0].x, snekPos!![0].y)
         snekPos?.removeAt(snekLength!! - 1)
         when(currDirection) {
             Direction.UP ->
@@ -86,14 +83,24 @@ class Engine(context: Context, size: Point) : SurfaceView(context), Runnable {
             Direction.LEFT ->
                 newHeadPos.x--
         }
+        when(newHeadPos.x) {
+            -1 ->
+                newHeadPos.x = blockCountX!! - 1
+            blockCountX!! ->
+                newHeadPos.x = 0
+        }
+        when(newHeadPos.y) {
+            -1 ->
+                newHeadPos.y = blockCountY!! - 1
+            blockCountY!! ->
+                newHeadPos.y = 0
+        }
         snekPos?.add(0, newHeadPos)
     }
 
     private fun checkCollision(): Boolean{
-        var headPos = snekPos!![0]
-        if( snekPos?.drop(1)?.contains(headPos) == true
-                || headPos.x == -1 || headPos.x == blockCountX!!
-                || headPos.y == -1 || headPos.y == blockCountY!!) {
+        val headPos = snekPos!![0]
+        if(snekPos?.drop(1)?.contains(headPos) == true) {
             return true
         }
         return false
@@ -129,10 +136,7 @@ class Engine(context: Context, size: Point) : SurfaceView(context), Runnable {
     }
 
     private fun updateState(){
-        var headPos = snekPos!![0]
-//        if(headPos == foodPos){
-//            eatFood()
-//        }
+        val headPos = snekPos!![0]
         when(currDirection){
             Direction.UP ->
                 if(headPos.x == foodPos?.x && headPos.y == foodPos?.y!! + 1){
@@ -183,7 +187,7 @@ class Engine(context: Context, size: Point) : SurfaceView(context), Runnable {
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        var act = event?.action
+        val act = event?.action
         if(act == MotionEvent.ACTION_DOWN){
             touchStart = PointF(event?.x!!, event.y)
         }
