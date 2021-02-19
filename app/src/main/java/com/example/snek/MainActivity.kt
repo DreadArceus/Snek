@@ -31,7 +31,7 @@ class Engine(context: Context, size: Point) : SurfaceView(context), Runnable {
     private var canvas: Canvas? = null
     private var paint: Paint? = null
 
-    private var FPS = 10
+    private var fps = 10
     private var lastUpdateTime: Long? = null
 
     private var touchStart: PointF? = null
@@ -129,7 +129,7 @@ class Engine(context: Context, size: Point) : SurfaceView(context), Runnable {
     }
 
     private fun updateRequired(): Boolean{
-        if(System.currentTimeMillis() >= lastUpdateTime!! + 1000/FPS){
+        if(System.currentTimeMillis() >= lastUpdateTime!! + 1000/fps){
             return true
         }
         return false
@@ -189,10 +189,10 @@ class Engine(context: Context, size: Point) : SurfaceView(context), Runnable {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val act = event?.action
         if(act == MotionEvent.ACTION_DOWN){
-            touchStart = PointF(event?.x!!, event.y)
+            touchStart = PointF(event.x, event.y)
         }
         else if(act == MotionEvent.ACTION_UP){
-            if(abs(touchStart!!.x - event?.x!!) >= minSwipe){
+            if(abs(touchStart!!.x - event.x) >= minSwipe){
                 if(touchStart!!.x > event.x && currDirection != Direction.RIGHT){
                     currDirection = Direction.LEFT
                 }
